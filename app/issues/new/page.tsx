@@ -26,25 +26,24 @@ const NewIssuePage = () => {
     formState: { errors },
   } = useForm<IssueForm>({ resolver: zodResolver(createIssueSchema) });
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setSubmiting(true);
+      const res = await axios.post("/api/issues", data);
+      console.log(res);
+      setSubmiting(true);
+      router.push("/issues");
+    } catch (e) {
+      console.error(e);
+      setSubmiting(true);
+      setError("Failed to create issue");
+    }
+  });
+
   return (
     <div className="max-w-xl">
       {error && <div className="text-red-500 mb-5">{error}</div>}
-      <form
-        className=" space-y-3"
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setSubmiting(true);
-            const res = await axios.post("/api/issues", data);
-            console.log(res);
-            setSubmiting(true);
-            router.push("/issues");
-          } catch (e) {
-            console.error(e);
-            setSubmiting(true);
-            setError("Failed to create issue");
-          }
-        })}
-      >
+      <form className=" space-y-3" onSubmit={onSubmit}>
         <TextField.Root>
           <TextField.Input
             placeholder="Title"
