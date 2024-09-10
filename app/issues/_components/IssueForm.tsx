@@ -2,7 +2,7 @@
 
 import { Spinner } from "@/app/components";
 import ErrorMsg from "@/app/components/ErrorMsg";
-import { createIssueSchema } from "@/app/validationSchema";
+import { IssueSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Issue } from "@prisma/client";
 import { TextField, Button } from "@radix-ui/themes";
@@ -17,7 +17,7 @@ import "easymde/dist/easymde.min.css";
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
-type IssueForm = z.infer<typeof createIssueSchema>;
+type IssueForm = z.infer<typeof IssueSchema>;
 
 const IssueFormPage = ({ issue }: { issue?: Issue }) => {
   const router = useRouter();
@@ -29,15 +29,16 @@ const IssueFormPage = ({ issue }: { issue?: Issue }) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IssueForm>({ resolver: zodResolver(createIssueSchema) });
+  } = useForm<IssueForm>({ resolver: zodResolver(IssueSchema) });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmiting(true);
-      const res = await axios.post("/api/issues", data);
-      console.log(res);
+      if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
+      else await axios.post("/api/issues", data);
       setSubmiting(true);
       router.push("/issues");
+      router.refresh();
     } catch (e) {
       console.error(e);
       setSubmiting(true);
@@ -69,7 +70,8 @@ const IssueFormPage = ({ issue }: { issue?: Issue }) => {
         <ErrorMsg>{errors.description?.message}</ErrorMsg>
 
         <Button disabled={submiting}>
-          Submit New Issue {submiting && <Spinner></Spinner>}
+          {issue ? "Update Issue" : "Submit New Issue"}{" "}
+          {submiting && <Spinner></Spinner>}
         </Button>
       </form>
     </div>
