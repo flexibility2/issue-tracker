@@ -13,10 +13,8 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import "easymde/dist/easymde.min.css";
+import SimpleMDE from "react-simplemde-editor";
 
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
 type IssueForm = z.infer<typeof IssueSchema>;
 
 const IssueFormPage = ({ issue }: { issue?: Issue }) => {
