@@ -1,9 +1,9 @@
-'use client';
+"use client";
 import classnames from "classnames";
 import Link from "next/link";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const currentPath = usePathname();
@@ -13,7 +13,7 @@ const Navbar = () => {
       label: "Dashborad",
     },
     {
-      herf: "/issues",
+      herf: "/issues/list",
       label: "issues",
     },
   ];
@@ -30,10 +30,10 @@ const Navbar = () => {
               href={link.herf}
               key={index}
               className={classnames({
-                'text-zinc-900': link.herf === currentPath,
-                'text-zinc-500': link.herf !== currentPath,
-                'hover:text-zinc-800 transition-colors': true
-              })} 
+                "text-zinc-900": link.herf === currentPath,
+                "text-zinc-500": link.herf !== currentPath,
+                "hover:text-zinc-800 transition-colors": true,
+              })}
             >
               {link.label}
             </Link>
