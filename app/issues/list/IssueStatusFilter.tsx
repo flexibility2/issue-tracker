@@ -30,7 +30,7 @@ const IssueStatusFilter = () => {
         router.push("/issues/list" + query);
       }}
     >
-      <Select.Trigger placeholder="Filter by status..." />
+      <Select.Trigger aria-label="Filter by status" />
       <Select.Content>
         {statusOptions.map((status) => (
           <Select.Item key={status.value} value={status.value || ""}>
