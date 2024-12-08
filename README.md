@@ -6,31 +6,39 @@ A modern, full-featured issue tracking system built with Next.js and integrated 
 ## Features
 
 - **Dashboard Overview**
+ ![image](https://github.com/user-attachments/assets/31cf5146-17d2-4421-8a8d-4a0a0956d49c)
   - Visual representation of issues by status (Open, In Progress, Closed)
   - Quick statistics and metrics
   - Latest issues overview
 
-- **Issue Management**
-  - Create, read, update, and delete issues
-  - Rich text editor with Markdown support
-  - File attachment capabilities
-  - Issue status tracking (Open, In Progress, Closed)
-  - Issue assignment to team members
-
-- **Advanced Filtering & Sorting**
+- **Issue list**
+ ![image](https://github.com/user-attachments/assets/4906656e-3618-4175-a8fa-2d409b96826a)
   - Filter issues by status
   - Sort by issue title, creation date, and status
   - Pagination support
+ 
+- **Issue Management**
+ ![image](https://github.com/user-attachments/assets/9754bf35-23e5-4e05-b9ad-58b1537483e6)
+ ![image](https://github.com/user-attachments/assets/10b55d22-02b9-4d73-a7de-40c963478d88)
+  - Create, read, update, and delete issues
+  - Rich text editor with Markdown support
+  - Issue assignment to team members
 
 - **User Authentication**
+  ![image](https://github.com/user-attachments/assets/4a762b84-db55-4986-9539-c84910015680)
+
   - Secure Google OAuth integration
 
 ## Tech Stack
 
 ### Frontend
 - Next.js 13
-- TypeScript
+- Zod
+- React hook form
+- React query
 - Radix UI
+- easymde
+- recharts
 
 ### Backend
 - MySQL
