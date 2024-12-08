@@ -8,10 +8,10 @@ import IssueActions from "./IssueActions";
 import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "@/app/components/Pagination";
-import IssueTable, { columnNames } from "./IssueTable";
+import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Issue; page: string };
+  searchParams: IssueQuery;
 }
 
 const IssuePage = async ({ searchParams }: Props) => {
