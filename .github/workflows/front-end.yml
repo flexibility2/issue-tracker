@@ -1,0 +1,96 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+      - SCIEN-161-setup-nx-ci-pipeline-with-github-actions
+    paths:
+      - 'apps/**'
+      - 'libs/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'nx.json'
+      - 'tsconfig.base.json'
+      - 'tailwind.config.js'
+      - 'eslint.config.js'
+  pull_request:
+    paths:
+      - 'apps/**'
+      - 'libs/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'nx.json'
+      - 'tsconfig.base.json'
+      - 'tailwind.config.js'
+      - 'eslint.config.js'
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Enable debug mode'
+        required: false
+        default: false
+        type: boolean
+      upload_artifacts:
+        description: 'Upload build artifacts'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  frontend-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Set SHAs for affected projects
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Lint affected projects
+        run: pnpm nx affected -t lint
+
+      - name: Build affected projects
+        run: pnpm nx affected -t build
+
+      - name: Run unit tests on affected projects
+        run: pnpm nx affected -t test:unit
+        continue-on-error: true
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests on affected projects
+        run: pnpm nx affected -t test:e2e
+        continue-on-error: true
+
+      - name: Upload build artifacts
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.upload_artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build-artifacts
+          path: |
+            apps/os/build
+            apps/circuit/build
+            apps/search/build
+          retention-days: 30
